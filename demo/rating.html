@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <span class="rating-star"></span>
+
+    <script>
+      function renderStarIcon(data, ele) {
+        /* default data */
+        var data = Object.assign(
+          {
+            size: '20px',
+            containerBg: '#fff',
+            starBg: '#ccc',
+            valueBg: '#ffc700',
+            value: 0
+          },
+          data
+        );
+
+        var starHtml ='<svg xmlns="http://www.w3.org/2000/svg" width="' + data.size + '" height="' + data.size + '" viewBox="0 0 100 100">' +
+            '<path d="M0,0 100,0 100,100 0,100 z" fill="' + data.starBg + '" />' +
+            '<path d="M0,0 ' + data.value + ",0 " + data.value + ',100 0,100 z" fill="' + data.valueBg + '" />' +
+            '<path d="M50,0 34,32 0,38 24,64 19,100 50,83 81,100 76,64 100,38 66,32 50,0 100,0 100,100 0,100 0,0 50,0" fill="' + data.containerBg + '" />' +
+          "</svg>";
+
+        if (ele) {
+          ele.innerHTML = starHtml;
+        } else {
+          return starHtml;
+        }
+      }
+
+      function renderRatingStar(ele, rating, data) {
+        if (!ele) {
+          return;
+        }
+
+        var ratingHtml = '';
+        var value;
+        var ratingArr = rating.toString().split('.');
+        var fullVal = ratingArr[0];
+        var partialVal = ratingArr[1] || 0;
+
+        if (!data) {
+          data = {};
+        }
+
+        for (var i = 1; i < 6; i++) {
+          if (i <= rating) {
+            value = 100;
+          } else if (i > rating && i - 1 < rating) {
+            value = partialVal * 10;
+          } else {
+            value = 0;
+          }
+
+          ratingHtml += renderStarIcon(Object.assign(data, { value: value }));
+        }
+
+        ele.innerHTML = ratingHtml;
+      }
+
+      renderRatingStar(document.querySelector('.rating-star'), 2.5);
+    </script>
+  </body>
+</html>
